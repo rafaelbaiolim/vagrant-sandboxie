@@ -8,9 +8,13 @@ Vagrant.configure("2") do |config|
 		subconfig.vm.hostname = "lab-dc1"
 		subconfig.vm.provider :virtualbox do |vb|
 			vb.gui = false
+			vb.memory = 2048
+			vb.cpus = 2
 		end
 		subconfig.vm.network "private_network", ip: "192.168.11.2", 
 			virtualbox__intnet: true
+		subconfig.vm.network "public_network", ip: "192.168.18.200", virtualbox__intnet: false,
+			bridge: "Realtek 8811CU Wireless LAN 802.11ac USB NIC"
 		subconfig.winrm.username = "vagrant"
 		subconfig.winrm.password = "vagrant"
 		subconfig.winrm.transport = :plaintext
@@ -18,16 +22,16 @@ Vagrant.configure("2") do |config|
 		subconfig.winrm.retry_limit = 60
 		subconfig.winrm.retry_delay = 20
 		#Install DSC Modules
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\PreDSCInstall.ps1"
-		#https://github.com/dsccommunity/ActiveDirectoryDsc
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\DSCInstallDomain.ps1"
-		#Restart VM to finish Active Directory Domain Services installation
-		subconfig.vm.provision :reload
-		#https://github.com/dsccommunity/xDhcpServer
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\DSCInstallDHCP.ps1"
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\PreDSCInstall.ps1"
+		# #https://github.com/dsccommunity/ActiveDirectoryDsc
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\DSCInstallDomain.ps1"
+		# #Restart VM to finish Active Directory Domain Services installation
+		# subconfig.vm.provision :reload
+		# #https://github.com/dsccommunity/xDhcpServer
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\DSCInstallDHCP.ps1"
 	end
 	  
 	config.vm.define "lab-dfsr1" do |subconfig|
@@ -35,23 +39,29 @@ Vagrant.configure("2") do |config|
 		subconfig.vm.hostname = "lab-dfsr1"
 		subconfig.vm.provider :virtualbox do |vb|
 			vb.gui = false
+			vb.cpus = 2
+			vb.memory = 2048
 		end
 		subconfig.vm.network "private_network", ip: "127.0.0.2", 
 			auto_config: false,
 			virtualbox__intnet: true
+		subconfig.vm.network "public_network", ip: "192.168.18.201", bridge: "Realtek 8811CU Wireless LAN 802.11ac USB NIC", 
+			virtualbox__intnet: false
 		subconfig.winrm.username = "vagrant"
 		subconfig.winrm.password = "vagrant"
 		subconfig.winrm.transport = :plaintext
 		subconfig.winrm.basic_auth_only = true
 		subconfig.winrm.retry_limit = 30
 		subconfig.winrm.retry_delay = 10
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\PreDSCInstall.ps1"
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\DSCJoinDomain.ps1"
-		subconfig.vm.provision :reload
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\DSCInstallDFS.ps1"
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\PreDSCInstall.ps1"
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\DSCJoinDomain.ps1"
+		# subconfig.vm.provision :reload
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\DSCInstallDFS.ps1"
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\DSCConfigureDFS.ps1"
 	end
 	
 	config.vm.define "lab-dfsr2" do |subconfig|
@@ -59,24 +69,28 @@ Vagrant.configure("2") do |config|
 		subconfig.vm.hostname = "lab-dfsr2"
 		subconfig.vm.provider :virtualbox do |vb|
 			vb.gui = false
+			vb.cpus = 2
+			vb.memory = 2048
 		end
 		subconfig.vm.network "private_network", ip: "127.0.0.2", 
 			auto_config: false,
 			virtualbox__intnet: true
+		subconfig.vm.network "public_network", ip: "192.168.18.202", bridge: "Realtek 8811CU Wireless LAN 802.11ac USB NIC", 
+			virtualbox__intnet: false
 		subconfig.winrm.username = "vagrant"
 		subconfig.winrm.password = "vagrant"
 		subconfig.winrm.transport = :plaintext
 		subconfig.winrm.basic_auth_only = true
 		subconfig.winrm.retry_limit = 30
 		subconfig.winrm.retry_delay = 10
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\PreDSCInstall.ps1"
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\DSCJoinDomain.ps1"
-		subconfig.vm.provision :reload
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\DSCInstallDFS.ps1"
-		subconfig.vm.provision "shell",
-			path: "..\\provision\\DSCConfigureDFS.ps1"
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\PreDSCInstall.ps1"
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\DSCJoinDomain.ps1"
+		# subconfig.vm.provision :reload
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\DSCInstallDFS.ps1"
+		# subconfig.vm.provision "shell",
+		# 	path: "..\\provision\\DSCConfigureDFS.ps1"
 	end
 end

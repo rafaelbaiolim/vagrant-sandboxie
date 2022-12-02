@@ -1,6 +1,7 @@
 ﻿Configuration xDhcpsServerScope_NewScope
 {
     Import-DscResource -ModuleName xDHCpServer
+    Import-DscResource -ModuleName 'PSDesiredStateConfiguration'
     #Define NIC IP
     $IP = Get-NetIPAddress -InterfaceAlias "Ethernet 2" | Where-Object {$_.IPAddress -notlike "*:*" } | select -ExpandProperty IPAddress
 

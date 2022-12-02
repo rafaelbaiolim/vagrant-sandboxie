@@ -1,0 +1,32 @@
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|	
+	config.vagrant.plugins = "vagrant-reload"
+	config.vm.define "lab-dc2" do |subconfig|
+		subconfig.vm.box = "gusztavvargadr/windows-server"
+		subconfig.vm.hostname = "lab-dc2"
+		subconfig.vm.provider :virtualbox do |vb|
+			vb.gui = false
+			vb.cpus = 2
+			vb.memory = 2048
+		end
+		subconfig.vm.network "private_network", ip: "127.0.0.2", 
+			auto_config: false,
+			virtualbox__intnet: true
+		# subconfig.vm.network "public_network", ip: "192.168.18.210", bridge: "Realtek 8811CU Wireless LAN 802.11ac USB NIC", 
+		# 	virtualbox__intnet: false
+		subconfig.winrm.username = "vagrant"
+		subconfig.winrm.password = "vagrant"
+		subconfig.winrm.transport = :plaintext
+		subconfig.winrm.basic_auth_only = true
+		subconfig.winrm.retry_limit = 30
+		subconfig.winrm.retry_delay = 10
+		subconfig.vm.provision "shell",
+			path: "..\\provision\\PreDSCInstall.ps1"
+			subconfig.vm.provision "shell",
+			path: "..\\provision\\DSCInstallDomainChild.ps1"
+			subconfig.vm.provision :reload
+	end
+	  
+end

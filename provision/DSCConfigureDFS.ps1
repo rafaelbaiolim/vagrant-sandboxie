@@ -59,6 +59,7 @@ $cd = @{
         @{
             NodeName = 'localhost'
             PSDscAllowPlainTextPassword = $true
+            PSDscAllowDomainUser = $true
          }
     )
 }
